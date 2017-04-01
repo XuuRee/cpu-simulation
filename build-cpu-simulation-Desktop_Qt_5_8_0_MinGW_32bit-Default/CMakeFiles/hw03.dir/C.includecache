@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.c
+cpu.h
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.h
+
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.h
+instruction_list.h
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
+
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.c
+instruction_list.h
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
+
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
+stdio.h
+-
+
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/main.c
+
