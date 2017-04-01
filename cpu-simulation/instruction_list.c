@@ -40,6 +40,10 @@ void printList(struct instructionList* container) {
 }
 
 
+/*
+ * i) lengthList, jako pocitat se zarazkou? +- 1 ?
+ * ii) musi opravdu byt container->end, current ukazovat ke konci na NULL ?
+ */
 unsigned int listClear(struct instructionList* container) {
     struct instruction *currentNode = container->current;
     struct instruction *nextNode;
@@ -56,14 +60,18 @@ unsigned int listClear(struct instructionList* container) {
     container->current = NULL;
     container->end = NULL;
 
-    return lengthList + 1;      // posledni, bez zarazky, tzn lengthList - 1
+    return lengthList + 1;
 }
 
+
+/*
+ * Musi byt item->next a item->prev nastaven na NULL
+ */
 void listPush(struct instructionList* container, struct instruction* item) {
-    if (container->current == NULL) {      // tzn. is NULL ?
+    if (!container->current) {
         container->current = item;
         container->end = item;
-        item->next = NULL;                  // has to be NULL?
+        item->next = NULL;
         item->prev = NULL;
     } else {
         container->end->next = item;
@@ -73,14 +81,33 @@ void listPush(struct instructionList* container, struct instruction* item) {
     }
 }
 
+
 const struct instruction * listStep(struct instructionList* container) {
-    return NULL;
+    if (listEmpty(container)) {
+        return NULL;
+    }
+
+    container->current = container->current->next;
+
+    return container->current->prev;
 }
+
 
 const struct instruction * listBackstep(struct instructionList* container) {
-    return NULL;
+    if (listEmpty(container)) {
+        return NULL;
+    }
+
+    container->current = container->current->prev;
+
+    return container->current->next;
 }
 
-unsigned int listEmpty(const struct instructionList* container) {
+
+int listEmpty(const struct instructionList* container) {
+    if (!container->current && !container->end) {
+        return 1;
+    }
+
     return 0;
 }

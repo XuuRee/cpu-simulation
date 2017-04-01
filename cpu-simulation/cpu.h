@@ -22,7 +22,7 @@ struct cpu {
     struct stack memory;
 };
 
-void cpuInit (struct cpu* cpu);
-void cpuClear (struct cpu* cpu);
+void cpuInit(struct cpu* cpu);
+void cpuClear(struct cpu* cpu);
 void cpuStep(struct cpu* cpu);
 void cpuDebug(const struct cpu* cpu);

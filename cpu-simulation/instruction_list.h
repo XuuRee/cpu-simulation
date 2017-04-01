@@ -35,4 +35,4 @@ unsigned int listClear(struct instructionList* container);
 void listPush(struct instructionList* container, struct instruction* item);
 const struct instruction * listStep(struct instructionList* container);
 const struct instruction * listBackstep(struct instructionList* container);
-unsigned int listEmpty(const struct instructionList* container);
+int listEmpty(const struct instructionList* container);

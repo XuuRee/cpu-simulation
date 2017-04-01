@@ -10,7 +10,7 @@ int main() {
     struct instruction *firstInstr;
     struct instruction *secondInstr;
 
-    list = malloc(sizeof(list));
+    list = malloc(sizeof(list));        // (instructionsList *)malloc()
 
     if (!list) {
         printf("Nepodarilo se alokovat pamet!\n");
@@ -42,9 +42,11 @@ int main() {
     secondInstr->prev = NULL;
 
     listInit(list);
+    printf("Is Empty: %d\n", listEmpty(list));
     listPush(list, firstInstr);
     listPush(list, secondInstr);
     printList(list);
+    printf("Is Empty: %d\n", listEmpty(list));
     printf("Delete items: %d\n", listClear(list));
     free(list);
 
