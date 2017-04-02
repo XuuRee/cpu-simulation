@@ -8,6 +8,7 @@ CMakeFiles/hw03.dir/cpu.c.obj: C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu
 CMakeFiles/hw03.dir/instruction_list.c.obj: C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.c
 CMakeFiles/hw03.dir/instruction_list.c.obj: C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
 
+CMakeFiles/hw03.dir/main.c.obj: C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.h
 CMakeFiles/hw03.dir/main.c.obj: C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
 CMakeFiles/hw03.dir/main.c.obj: C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/main.c
 

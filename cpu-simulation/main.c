@@ -1,16 +1,41 @@
-#include "instruction_list.h"
+//#include "instruction_list.h"
+#include "cpu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
-int main() {
-    printf("Program is now starting...\n");
+int main()
+{
+    printf("Program is starting now...\n");
+
+    struct stack *memory;
+
+    memory = malloc(sizeof(memory));
+
+    if (!memory) {
+        printf("Nepodarilo se alokovat pamet!\n");
+        return 1;
+    }
+
+    stackInit(memory);
+    //printf("%d\n", isEmpty(memory));
+    stackPush(memory, 32);
+    stackPush(memory, 5);
+    stackPush(memory, 17);
+    stackPush(memory, 8);
+    stackPop(memory);
+    printf("%d\n", *(memory->top));
+    //printf("%d\n", isEmpty(memory));
+    stackClear(memory);
+    free(memory);
+
+    /* =================================================================
 
     struct instructionList *list;
     struct instruction *firstInstr;
     struct instruction *secondInstr;
 
-    list = malloc(sizeof(list));        // (instructionsList *)malloc()
+    list = malloc(sizeof(list));          // (instructionsList *)malloc()
 
     if (!list) {
         printf("Nepodarilo se alokovat pamet!\n");
@@ -49,6 +74,8 @@ int main() {
     printf("Is Empty: %d\n", listEmpty(list));
     printf("Delete items: %d\n", listClear(list));
     free(list);
+
+    ================================================================= */
 
 	return 0;
 }

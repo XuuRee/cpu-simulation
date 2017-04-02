@@ -5,6 +5,7 @@
  */
 
 #include "instruction_list.h"
+#include <stdint.h>
 
 struct stack {
     int* values;
@@ -13,7 +14,7 @@ struct stack {
 
 void stackInit(struct stack* stack);
 void stackClear(struct stack* stack);
-void stackPush(struct stack* stack, int cpu_register);
+void stackPush(struct stack* stack, int32_t cpu_register);
 void stackPop(struct stack* stack);
 
 struct cpu {

@@ -9,6 +9,8 @@
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.c
 cpu.h
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.h
+stdio.h
+-
 stdlib.h
 -
 assert.h
@@ -17,6 +19,8 @@ assert.h
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.h
 instruction_list.h
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
+stdint.h
+-
 
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.c
 instruction_list.h
@@ -29,8 +33,8 @@ stdio.h
 -
 
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/main.c
-instruction_list.h
-C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
+cpu.h
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.h
 stdio.h
 -
 stdlib.h
