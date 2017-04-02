@@ -4,9 +4,6 @@
 #include <assert.h>
 
 
-/*
- * i) Ma byt alokovano int, nebo int_32t
- */
 void stackInit(struct stack* stack)
 {
     stack->values = (int32_t *)calloc(512, sizeof(int32_t));

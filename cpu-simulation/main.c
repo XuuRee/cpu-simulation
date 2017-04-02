@@ -10,7 +10,7 @@ int main()
 
     struct stack *memory;
 
-    memory = malloc(sizeof(memory));
+    memory = malloc(sizeof *memory);
 
     if (!memory) {
         printf("Nepodarilo se alokovat pamet!\n");
