@@ -25,6 +25,9 @@ int main()
     stackPush(memory, 8);
 
     stackPop(memory);
+    stackPop(memory);
+    stackPop(memory);
+    stackPop(memory);
 
     stackClear(memory);
     free(memory);

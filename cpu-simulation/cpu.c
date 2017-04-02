@@ -6,7 +6,7 @@
 
 void stackInit(struct stack* stack)
 {
-    stack->values = (int32_t *)calloc(512, sizeof(int32_t));
+    stack->values = calloc(512, sizeof(int32_t));
     assert(stack->values != NULL);
     stack->top = NULL;
 }
@@ -55,9 +55,10 @@ void stackPop(struct stack* stack)
 
     if (stack->top == stack->values) {
         stack->top = NULL;
-    } else {
-        stack->top--;
+        return;
     }
+
+    stack->top--;
 }
 
 
