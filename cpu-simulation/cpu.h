@@ -8,8 +8,8 @@
 #include <stdint.h>
 
 struct stack {
-    int* values;
-    int* top;
+    int32_t* values;    // int values
+    int32_t* top;
 };
 
 void stackInit(struct stack* stack);

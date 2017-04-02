@@ -9,7 +9,7 @@
  */
 void stackInit(struct stack* stack)
 {
-    stack->values = (int *)calloc(512, sizeof(int));    // = (int *)malloc(2048); int nebo int32_t?
+    stack->values = (int32_t *)calloc(512, sizeof(int32_t));
     assert(stack->values != NULL);
     stack->top = NULL;
 }
@@ -37,7 +37,7 @@ void stackPush(struct stack* stack, int32_t cpu_register)
 {
     assert(stack->values != NULL);
 
-    int *start = stack->values;
+    int32_t *start = stack->values;
 
     while (*start != 0) {
         start++;
@@ -54,11 +54,11 @@ void stackPop(struct stack* stack)
         return;
     }
 
+    *(stack->top) = 0;
+
     if (stack->top == stack->values) {
-        *(stack->top) = 0;
         stack->top = NULL;
     } else {
-        *(stack->top) = 0;
         stack->top--;
     }
 }
