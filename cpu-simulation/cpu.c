@@ -70,18 +70,21 @@ void stackPop(struct stack* stack)
 
 void cpuInit(struct cpu* cpu)
 {
+    struct stack *memory;
+    memory = &cpu->memory;
+
     // registry
     memset(cpu->registers, 0, 3);
 
     // instrukce, list
-    &cpu->programList = malloc(sizeof cpu->programList);
+    cpu->programList = malloc(sizeof cpu->programList);
     assert(cpu->programList != NULL);
     listInit(cpu->programList);
 
     // pamet, stack
-    cpu->memory = malloc(sizeof *cpu->memory);
-    assert(cpu->memory != NULL);
-    stackInit(cpu->memory);
+    memory = malloc(sizeof *memory);
+    assert(memory != NULL);
+    stackInit(memory);
 }
 
 
@@ -91,12 +94,12 @@ void cpuClear(struct cpu* cpu)
     memset(cpu->registers, 0, 3);
 
     // instrukce, list
-    listClear(cpu->programList);
-    free(cpu->programList);
+    listClear(&cpu->programList);
+    free(&cpu->programList);
 
     // pamet, stack
-    stackClear(cpu->memory);
-    free(cpu->memory);
+    stackClear(&cpu->memory);
+    free(&cpu->memory);
 }
 
 
