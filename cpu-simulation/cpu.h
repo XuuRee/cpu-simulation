@@ -19,7 +19,7 @@ void stackPop(struct stack* stack);
 
 struct cpu {
     int32_t registers[3];
-    struct instructionList programList;
+    struct instructionList programList;    // not pointers
     struct stack memory;
 };
 

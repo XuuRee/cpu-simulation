@@ -6,6 +6,8 @@
 
 int main()
 {
+    /* =================================================================
+
     printf("Program is starting now...\n");
 
     struct stack *memory;
@@ -32,13 +34,15 @@ int main()
     stackClear(memory);
     free(memory);
 
+    ================================================================= */
+
     /* =================================================================
 
     struct instructionList *list;
     struct instruction *firstInstr;
     struct instruction *secondInstr;
 
-    list = malloc(sizeof(list));          // (instructionsList *)malloc()
+    list = malloc(sizeof(list));          // (instructionsList *)malloc() or sizeof(* list)
 
     if (!list) {
         printf("Nepodarilo se alokovat pamet!\n");

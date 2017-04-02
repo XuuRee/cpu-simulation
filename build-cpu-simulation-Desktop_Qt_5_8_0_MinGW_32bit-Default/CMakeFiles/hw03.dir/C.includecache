@@ -11,6 +11,8 @@ cpu.h
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.h
 stdio.h
 -
+string.h
+-
 stdlib.h
 -
 assert.h
