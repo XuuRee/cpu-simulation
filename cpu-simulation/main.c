@@ -18,14 +18,14 @@ int main()
     }
 
     stackInit(memory);
-    //printf("%d\n", isEmpty(memory));
+
     stackPush(memory, 32);
     stackPush(memory, 5);
     stackPush(memory, 17);
     stackPush(memory, 8);
+
     stackPop(memory);
-    printf("%d\n", *(memory->top));
-    //printf("%d\n", isEmpty(memory));
+
     stackClear(memory);
     free(memory);
 
