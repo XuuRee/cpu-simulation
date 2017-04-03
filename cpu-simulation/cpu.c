@@ -32,6 +32,8 @@ void stackPrint(const struct stack* stack)
         }
 
         fprintf(stdout, " %d\n", *(stack->top));        //\n
+    } else {
+        fprintf(stdout, "\n");
     }
 }
 
