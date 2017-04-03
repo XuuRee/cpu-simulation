@@ -117,7 +117,10 @@ void cpuClear(struct cpu* cpu)
 }
 
 
-void cpuStep(struct cpu* cpu) {}
+void cpuStep(struct cpu* cpu)
+{
+
+}
 
 
 void cpuDebug(const struct cpu* cpu)

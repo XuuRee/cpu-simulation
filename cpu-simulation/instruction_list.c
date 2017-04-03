@@ -105,7 +105,7 @@ const struct instruction * listBackstep(struct instructionList* container) {
 
 
 int listEmpty(const struct instructionList* container) {
-    if (!container->current && !container->end) {
+    if (!container->current) {
         return 1;
     }
 
