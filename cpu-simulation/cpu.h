@@ -14,6 +14,7 @@ struct stack {
 
 void stackInit(struct stack* stack);
 void stackClear(struct stack* stack);
+void stackPrint(const struct stack* stack);   // nesmi to byt, pouze pro testovaci ucely! printStack primo do cpuDebug
 void stackPush(struct stack* stack, int32_t cpu_register);
 void stackPop(struct stack* stack);
 

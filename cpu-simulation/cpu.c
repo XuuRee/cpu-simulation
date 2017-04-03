@@ -21,6 +21,21 @@ void stackClear(struct stack* stack)
 }
 
 
+void stackPrint(const struct stack* stack)
+{
+    if (stack->top != NULL) {
+        unsigned int i = 0;
+
+        while(&(stack->values)[i] != stack->top) {
+            fprintf(stdout, " %d", (stack->values)[i]);    //%zu
+            i++;
+        }
+
+        fprintf(stdout, " %d\n", *(stack->top));        //\n
+    }
+}
+
+
 int isEmpty(struct stack* stack)
 {
     if (!stack->top) {
@@ -40,7 +55,7 @@ void stackPush(struct stack* stack, int32_t cpu_register)
 
     int32_t *start = stack->values;
 
-    while (*start != 0) {
+    while (*start != 0) {   // musi byt neco jineho, je mozne ze na stack budu potrebovat ulozit 0 !
         start++;
     }
 
@@ -101,4 +116,11 @@ void cpuClear(struct cpu* cpu)
 
 
 void cpuStep(struct cpu* cpu) {}
-void cpuDebug(const struct cpu* cpu) {}
+
+
+void cpuDebug(const struct cpu* cpu)
+{
+    // na vypsani int32_t potrebuji prst %zu,
+    fprintf(stdout, "# Registers %d %d %d | Stack", (cpu->registers)[0], (cpu->registers)[1], (cpu->registers)[2]);
+    stackPrint(&cpu->memory);
+}

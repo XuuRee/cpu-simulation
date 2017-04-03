@@ -6,8 +6,6 @@
 
 int main()
 {
-    /* =================================================================
-
     printf("Program is starting now...\n");
 
     struct stack *memory;
@@ -21,10 +19,14 @@ int main()
 
     stackInit(memory);
 
+    stackPrint(memory);
+
     stackPush(memory, 32);
     stackPush(memory, 5);
     stackPush(memory, 17);
     stackPush(memory, 8);
+
+    stackPrint(memory);
 
     stackPop(memory);
     stackPop(memory);
@@ -33,8 +35,6 @@ int main()
 
     stackClear(memory);
     free(memory);
-
-    ================================================================= */
 
     /* =================================================================
 
