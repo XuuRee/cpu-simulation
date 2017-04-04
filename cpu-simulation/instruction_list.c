@@ -1,9 +1,7 @@
 #include "instruction_list.h"
 #include <stdlib.h>
 
-/*
- * Inicializovat vsechny ostatni argumenty na NULL nebo 0 ?
- */
+
 void listInit(struct instructionList* container) {
     container->current = NULL;
     container->end = NULL;
@@ -31,11 +29,11 @@ const char* getInstruction(enum instructionType instruction) {
 
 
 void printList(struct instructionList* container) {
-    struct instruction *currentNode = container->current;
+    struct instruction *current = container->current;
 
-    while (currentNode != NULL) {
-        printf("%s\n", getInstruction(currentNode->type));
-        currentNode = currentNode->next;
+    while (current != NULL) {
+        printf("%s\n", getInstruction(current->type));
+        current = current->next;
     }
 }
 
@@ -43,31 +41,29 @@ void printList(struct instructionList* container) {
 /*
  * i) lengthList, jako pocitat se zarazkou? +- 1 ?
  * ii) musi opravdu byt container->end, current ukazovat ke konci na NULL ?
+ * iii) NON-FUNCTION!
  */
 unsigned int listClear(struct instructionList* container) {
-    struct instruction *currentNode = container->current;
-    struct instruction *nextNode;
+    struct instruction *current = container->current;
+    struct instruction *next;
     unsigned int lengthList = 0;
 
-    while (currentNode->next != NULL) {
-        nextNode = currentNode->next;
-        free(currentNode);
-        currentNode = nextNode;
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
         lengthList++;
     }
 
-    free(currentNode);
     container->current = NULL;
     container->end = NULL;
 
-    return lengthList + 1;
+    return lengthList;
 }
 
 
-/*
- * Musi byt item->next a item->prev nastaven na NULL
- */
-void listPush(struct instructionList* container, struct instruction* item) {
+void listPush(struct instructionList* container, struct instruction* item)
+{
     if (!container->current) {
         container->current = item;
         container->end = item;
@@ -82,28 +78,29 @@ void listPush(struct instructionList* container, struct instruction* item) {
 }
 
 
-const struct instruction * listStep(struct instructionList* container) {
+const struct instruction * listStep(struct instructionList* container)
+{
     if (listEmpty(container)) {
         return NULL;
     }
 
     container->current = container->current->next;
-
     return container->current->prev;
 }
 
 
-const struct instruction * listBackstep(struct instructionList* container) {
+const struct instruction * listBackstep(struct instructionList* container)
+{
     if (listEmpty(container)) {
         return NULL;
     }
 
     container->current = container->current->prev;
-
     return container->current->next;
 }
 
 
-int listEmpty(const struct instructionList* container) {
+unsigned int listEmpty(const struct instructionList* container)
+{
     return (!container->current) ? 1 : 0;
 }

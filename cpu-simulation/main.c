@@ -1,11 +1,13 @@
-//#include "instruction_list.h"
-#include "cpu.h"
+#include "instruction_list.h"
+//#include "cpu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
 int main()
 {
+    /* =================================================================
+
     printf("Program is starting now...\n");
 
     struct stack *memory;
@@ -36,13 +38,13 @@ int main()
     stackClear(memory);
     free(memory);
 
-    /* =================================================================
+    ================================================================= */
 
     struct instructionList *list;
     struct instruction *firstInstr;
     struct instruction *secondInstr;
 
-    list = malloc(sizeof(list));          // (instructionsList *)malloc() or sizeof(* list)
+    list = malloc(sizeof *list);          // (instructionsList *)malloc() or sizeof(* list)
 
     if (!list) {
         printf("Nepodarilo se alokovat pamet!\n");
@@ -77,12 +79,10 @@ int main()
     printf("Is Empty: %d\n", listEmpty(list));
     listPush(list, firstInstr);
     listPush(list, secondInstr);
-    printList(list);
+    printList(list);        // implicit declaration of printList ! warning
     printf("Is Empty: %d\n", listEmpty(list));
     printf("Delete items: %d\n", listClear(list));
     free(list);
-
-    ================================================================= */
 
 	return 0;
 }

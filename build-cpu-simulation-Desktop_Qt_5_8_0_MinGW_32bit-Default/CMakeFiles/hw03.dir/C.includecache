@@ -35,8 +35,8 @@ stdio.h
 -
 
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/main.c
-cpu.h
-C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/cpu.h
+instruction_list.h
+C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
 stdio.h
 -
 stdlib.h
