@@ -119,6 +119,46 @@ void cpuClear(struct cpu* cpu)
 
 void cpuStep(struct cpu* cpu)
 {
+    const struct instruction *instruction = listStep(&cpu->programList);
+    int32_t argument = 0;
+
+    switch (instruction->type) {
+        case InstNop:
+            return;
+
+        case InstAdd:
+            cpu->registers[0] += cpu->registers[2];
+            return;
+
+        case InstSub:
+            cpu->registers[0] -= cpu->registers[2];
+            return;
+
+        case InstMul:
+            cpu->registers[0] *= cpu->registers[2];
+            return;
+
+        case InstDiv:
+            cpu->registers[0] /= cpu->registers[2];
+            return;
+
+        case InstMova:
+            scanf("%d", &argument);
+            cpu->registers[0] = argument;
+            return;
+
+        case InstLoad:
+            cpu->registers[0] = *((cpu->memory).top) - cpu->registers[1];
+            return;
+
+        case InstSwac: return;
+        case InstSwab: return;
+        case InstInc: return;
+        case InstDec: return;
+        case InstPush: return;
+        case InstPop: return;
+        default: return;
+   }
 
 }
 
