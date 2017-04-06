@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 
 enum instructionType {
     InstNop,
@@ -19,7 +20,7 @@ enum instructionType {
 struct instruction {
 	struct instruction *prev, *next; 
 	enum instructionType type;
-	int arg;
+    int32_t arg;    //int
 };
 
 struct instructionList {

@@ -47,7 +47,7 @@ bool saveInstructions(struct cpu *unit)
     do {
         fprintf(stdout, "> ");
 
-        struct instruction *instr = malloc(sizeof instr);
+        struct instruction *instr = malloc(sizeof *instr);
         assert(instr != NULL);
 
         fgets(buffer, 32, stdin);
@@ -67,24 +67,19 @@ bool saveInstructions(struct cpu *unit)
 
         int instrEnum = getInstructionStdin(instruction);
 
-        if (strcmp(instruction, "mova") == 0) {
-            argument = strtok(NULL, " ");
-            instr->arg = atoi(argument);
+        if (!instrEnum) {
+            free(instr);
+        } else {
+            if (strcmp(instruction, "mova") == 0) {
+                argument = strtok(NULL, " ");
+                instr->arg = atoi(argument);
+            } else {
+                instr->arg = 0;
+            }
             instr->type = instrEnum - 1;
             listPush(&unit->programList, instr);
-        } else {
-            if (instrEnum) {
-                instr->arg = 0;
-                instr->type = instrEnum - 1;
-                listPush(&unit->programList, instr);
-            }
         }
-
-        // instr = 0x0; // really potrebuji
-
     } while(true);
-
-    return true;
 }
 
 
@@ -113,18 +108,12 @@ int main(int argc, char *argv[])
             while(saveInstructions(unit)) {
                 printf("Instrukce byly ulozeny\n");
             }
-            cpuClear(unit);
-            free(unit);
-            return 0;                   // mohu vymazat, a cpuClear s free nechat jen na konci
         }
 
         if (strcmp(argv[1], "-R") == 0) {
             while(saveInstructions(unit)) {
                 printf("Instrukce byly ulozeny\n");
             }
-            cpuClear(unit);
-            free(unit);
-            return 0;
         }
     }
 
