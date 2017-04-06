@@ -1,141 +1,134 @@
-//#include "instruction_list.h"
 #include "cpu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
+#include <stdbool.h>
 
-int main()
+
+int getInstructionStdin(const char* instruction) {
+    if (strcmp(instruction, "nop\n") == 0) {
+        return 1;
+    } else if (strcmp(instruction, "add\n") == 0) {
+        return 2;
+    } else if (strcmp(instruction, "sub\n") == 0) {
+        return 3;
+    } else if (strcmp(instruction, "mul\n") == 0) {
+        return 4;
+    } else if (strcmp(instruction, "div\n") == 0) {
+        return 5;
+    } else if (strcmp(instruction, "mova") == 0) {
+        return 6;
+    } else if (strcmp(instruction, "load\n") == 0) {
+        return 7;
+    } else if (strcmp(instruction, "swac\n") == 0) {
+        return 8;
+    } else if (strcmp(instruction, "swab\n") == 0) {
+        return 9;
+    } else if (strcmp(instruction, "inc\n") == 0) {
+        return 10;
+    } else if (strcmp(instruction, "dec\n") == 0) {
+        return 11;
+    } else if (strcmp(instruction, "push\n") == 0) {
+        return 12;
+    } else if (strcmp(instruction, "pop\n") == 0) {
+        return 13;
+    } else {
+        return 0;
+    }
+}
+
+
+bool saveInstructions(struct cpu *unit)
+{
+    char buffer[32];
+    char *instruction, *argument;
+
+    do {
+        fprintf(stdout, "> ");
+
+        struct instruction *instr = malloc(sizeof instr);
+        assert(instr != NULL);
+
+        fgets(buffer, 32, stdin);
+        assert(buffer != NULL);
+
+        instruction = strtok(buffer, " ");
+
+        if (strcmp(instruction, "halt\n") == 0) {
+            free(instr);
+            return false;
+        }
+
+        if (strcmp(instruction, "run\n") == 0) {
+            free(instr);
+            return true;
+        }
+
+        int instrEnum = getInstructionStdin(instruction);
+
+        if (strcmp(instruction, "mova") == 0) {
+            argument = strtok(NULL, " ");
+            instr->arg = atoi(argument);
+            instr->type = instrEnum - 1;
+            listPush(&unit->programList, instr);
+        } else {
+            if (instrEnum) {
+                instr->arg = 0;
+                instr->type = instrEnum - 1;
+                listPush(&unit->programList, instr);
+            }
+        }
+
+        // instr = 0x0; // really potrebuji
+
+    } while(true);
+
+    return true;
+}
+
+
+int main(int argc, char *argv[])
 {
     struct cpu *unit;
 
     unit = malloc(sizeof *unit);
-
-    if (!unit) {
-        printf("Nepodarilo se alokovat pamet!\n");
-        return 1;
-    }
-
-    struct instruction *firstInstr;
-    struct instruction *secondInstr;
-
-    // -----------------------------------------------
-
-    firstInstr = malloc(sizeof(firstInstr));
-
-    if (!firstInstr) {
-        printf("Nepodarilo se alokovat pamet!\n");
-        return 1;
-    }
-
-    secondInstr = malloc(sizeof(secondInstr));
-
-    if (!secondInstr) {
-        printf("Nepodarilo se alokovat pamet!\n");
-        return 1;
-    }
-
-    firstInstr->arg = 1;
-    firstInstr->type = InstAdd;
-    firstInstr->next = NULL;
-    firstInstr->prev = NULL;
-
-    secondInstr->arg = 1;
-    secondInstr->type = InstSub;
-    secondInstr->next = NULL;
-    secondInstr->prev = NULL;
-
-    // -----------------------------------------------
+    assert(unit != NULL);
 
     cpuInit(unit);
-    listPush(&unit->programList,firstInstr);
-    listPush(&unit->programList,secondInstr);
-    cpuStep(unit);
-    cpuDebug(unit);
+
+    if (argc < 2 || argc > 3) {
+        cpuClear(unit);
+        free(unit);
+        fprintf(stderr, "ERROR: Wrong number of arguments in main function!\n");
+        return 1;
+    } else {
+        if (strcmp(argv[1], "-h") == 0) {
+            fprintf(stdout, "\n-h\t\tprogram vypise informace o programu a jeho prepinacich, nasledne se ukonci\n");
+            fprintf(stdout, "-r <number>\tpo zavolani prikazu run program vyhodnoti nejvyse <number> instrukci\n");
+            fprintf(stdout, "-R\t\tpo zavolani prikazu run program vyhodnocuje instrukce ve fronte tak dlouho, dokud nenarazi na konec seznamu instrukci\n\n");
+        }
+
+        if (strcmp(argv[1], "-r") == 0) {
+            while(saveInstructions(unit)) {
+                printf("Instrukce byly ulozeny\n");
+            }
+            cpuClear(unit);
+            free(unit);
+            return 0;                   // mohu vymazat, a cpuClear s free nechat jen na konci
+        }
+
+        if (strcmp(argv[1], "-R") == 0) {
+            while(saveInstructions(unit)) {
+                printf("Instrukce byly ulozeny\n");
+            }
+            cpuClear(unit);
+            free(unit);
+            return 0;
+        }
+    }
+
     cpuClear(unit);
-
     free(unit);
-
-    /* =================================================================
-
-    printf("Program is starting now...\n");
-
-    struct stack *memory;
-
-    memory = malloc(sizeof *memory);
-
-    if (!memory) {
-        printf("Nepodarilo se alokovat pamet!\n");
-        return 1;
-    }
-
-    stackInit(memory);
-
-    stackPrint(memory);
-
-    stackPush(memory, 32);
-    stackPush(memory, 5);
-    stackPush(memory, 17);
-    stackPush(memory, 8);
-
-    stackPrint(memory);
-
-    stackPop(memory);
-    stackPop(memory);
-    stackPop(memory);
-    stackPop(memory);
-
-    stackClear(memory);
-    free(memory);
-
-    ================================================================= */
-
-    /* =================================================================
-
-    struct instructionList *list;
-    struct instruction *firstInstr;
-    struct instruction *secondInstr;
-
-    list = malloc(sizeof *list);          // (instructionsList *)malloc() or sizeof(* list)
-
-    if (!list) {
-        printf("Nepodarilo se alokovat pamet!\n");
-        return 1;
-    }
-
-    firstInstr = malloc(sizeof(firstInstr));
-
-    if (!firstInstr) {
-        printf("Nepodarilo se alokovat pamet!\n");
-        return 1;
-    }
-
-    secondInstr = malloc(sizeof(secondInstr));
-
-    if (!secondInstr) {
-        printf("Nepodarilo se alokovat pamet!\n");
-        return 1;
-    }
-
-    firstInstr->arg = 1;
-    firstInstr->type = InstAdd;
-    firstInstr->next = NULL;
-    firstInstr->prev = NULL;
-
-    secondInstr->arg = 1;
-    secondInstr->type = InstSub;
-    secondInstr->next = NULL;
-    secondInstr->prev = NULL;
-
-    listInit(list);
-    printf("Is Empty: %d\n", listEmpty(list));
-    listPush(list, firstInstr);
-    listPush(list, secondInstr);
-    printList(list);        // implicit declaration of printList ! warning
-    printf("Is Empty: %d\n", listEmpty(list));
-    printf("Delete items: %d\n", listClear(list));
-    free(list);
-
-    ================================================================= */
-
 	return 0;
 }

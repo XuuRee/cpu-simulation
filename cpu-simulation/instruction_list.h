@@ -27,10 +27,6 @@ struct instructionList {
 };
 
 void listInit(struct instructionList* container);
-// -------------------------------------------------------
-//const char* getInstruction(enum instructionType instruct);      // static !
-//void printList(struct instructionList* container);
-// -------------------------------------------------------
 unsigned int listClear(struct instructionList* container);
 void listPush(struct instructionList* container, struct instruction* item);
 const struct instruction * listStep(struct instructionList* container);

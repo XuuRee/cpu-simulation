@@ -89,29 +89,23 @@ void stackPop(struct stack* stack)
 
 void cpuInit(struct cpu* cpu)
 {
-    struct instructionList *pointerList = &cpu->programList;
-    struct stack *pointerMemory = &cpu->memory;
-
     //memset(cpu->registers, 0, sizeof(cpu->registers));   // memset
     cpu->registers[0] = 0;
     cpu->registers[1] = 0;
     cpu->registers[2] = 0;
-    listInit(pointerList);
-    stackInit(pointerMemory);
+    listInit(&cpu->programList);
+    stackInit(&cpu->memory);
 }
 
 
 void cpuClear(struct cpu* cpu)
 {
-    memset(cpu->registers, 0, sizeof(cpu->registers));
-
+    //memset(cpu->registers, 0, sizeof(cpu->registers));  // memset
+    cpu->registers[0] = 0;
+    cpu->registers[1] = 0;
+    cpu->registers[2] = 0;
     listClear(&cpu->programList);
-    free(cpu->programList.current);
-    free(cpu->programList.end);
-    //free(&cpu->programList);
-
     stackClear(&cpu->memory);
-    free(&cpu->memory);
 }
 
 

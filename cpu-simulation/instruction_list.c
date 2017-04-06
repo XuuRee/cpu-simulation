@@ -61,14 +61,14 @@ unsigned int listClear(struct instructionList* container) {
 void listPush(struct instructionList* container, struct instruction* item)
 {
     if (!container->current) {
-        container->current = item;
-        container->end = item;
         item->next = NULL;
         item->prev = NULL;
+        container->current = item;
+        container->end = item;
     } else {
-        container->end->next = item;
         item->next = NULL;
         item->prev = container->end;
+        container->end->next = item;
         container->end = item;
     }
 }

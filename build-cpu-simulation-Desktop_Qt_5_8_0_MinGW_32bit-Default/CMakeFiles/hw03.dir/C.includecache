@@ -45,4 +45,8 @@ stdlib.h
 -
 assert.h
 -
+string.h
+-
+stdbool.h
+-
 
