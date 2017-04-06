@@ -9,7 +9,7 @@ void listInit(struct instructionList* container) {
 }
 
 
-const char* getInstruction(enum instructionType instruction) {
+const char *getInstruction(enum instructionType instruction) {
     switch (instruction) {
         case InstNop: return "InstNop";
         case InstAdd: return "InstAdd";
@@ -74,10 +74,14 @@ void listPush(struct instructionList* container, struct instruction* item)
 }
 
 
-const struct instruction * listStep(struct instructionList* container)
+const struct instruction *listStep(struct instructionList* container)
 {
     if (listEmpty(container)) {
         return NULL;
+    }
+
+    if (!container->current->next) {
+        return container->current;
     }
 
     container->current = container->current->next;
@@ -85,7 +89,7 @@ const struct instruction * listStep(struct instructionList* container)
 }
 
 
-const struct instruction * listBackstep(struct instructionList* container)
+const struct instruction *listBackstep(struct instructionList* container)
 {
     if (listEmpty(container)) {
         return NULL;

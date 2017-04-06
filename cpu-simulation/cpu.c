@@ -30,9 +30,9 @@ void stackPrint(const struct stack* stack)
             fprintf(stdout, " %d", (stack->values)[i]);    //%zu
             i++;
         }
-        if (i != 0) {
+        //if (i != 0) {
             fprintf(stdout, " %d\n", *(stack->top));        //\n
-        }
+        //}
 
     } else {
         fprintf(stdout, "\n");
@@ -112,7 +112,8 @@ void cpuClear(struct cpu* cpu)
 void cpuStep(struct cpu* cpu)
 {
     const struct instruction *instruction = listStep(&cpu->programList);
-    int32_t argument = 0;
+    assert(instruction != NULL);
+    int32_t tmp = 0;
 
     switch (instruction->type) {
         case InstNop:
@@ -135,8 +136,7 @@ void cpuStep(struct cpu* cpu)
             return;
 
         case InstMova:
-            scanf("%d", &argument);
-            cpu->registers[0] = argument;
+            cpu->registers[0] = instruction->arg;
             return;
 
         case InstLoad:
@@ -144,11 +144,15 @@ void cpuStep(struct cpu* cpu)
             return;
 
         case InstSwac:
+            tmp = cpu->registers[0];
             cpu->registers[0] = cpu->registers[2];
+            cpu->registers[2] = tmp;
             return;
 
         case InstSwab:
+            tmp = cpu->registers[0];
             cpu->registers[0] = cpu->registers[1];
+            cpu->registers[1] = tmp;
             return;
 
         case InstInc:

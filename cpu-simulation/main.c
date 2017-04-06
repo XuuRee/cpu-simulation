@@ -6,6 +6,20 @@
 #include <stdbool.h>
 
 
+unsigned int listLength(struct instructionList *container)
+{
+    unsigned int length = 0;
+    struct instruction *start = container->current;
+
+    while (start != NULL) {
+        length++;
+        start = start->next;
+    }
+
+    return length;
+}
+
+
 int getInstructionStdin(const char* instruction) {
     if (strcmp(instruction, "nop\n") == 0) {
         return 1;
@@ -106,13 +120,25 @@ int main(int argc, char *argv[])
 
         if (strcmp(argv[1], "-r") == 0) {
             while(saveInstructions(unit)) {
-                printf("Instrukce byly ulozeny\n");
+                unsigned int iterations = atoi(argv[2]);
+                unsigned int length = listLength(&unit->programList);
+                while (iterations > 0 && length > 0) {
+                    cpuStep(unit);
+                    iterations--;
+                    length--;
+                }
+                cpuDebug(unit);
             }
         }
 
         if (strcmp(argv[1], "-R") == 0) {
-            while(saveInstructions(unit)) {
-                printf("Instrukce byly ulozeny\n");
+            while (saveInstructions(unit)) {
+                unsigned int length = listLength(&unit->programList);
+                while (length > 0) {
+                    cpuStep(unit);
+                    length--;
+                }
+                cpuDebug(unit);
             }
         }
     }
