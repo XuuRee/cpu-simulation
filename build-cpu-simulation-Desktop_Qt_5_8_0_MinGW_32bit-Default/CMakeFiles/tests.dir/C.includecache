@@ -29,6 +29,8 @@ instruction_list.h
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
 stdlib.h
 -
+assert.h
+-
 
 C:/Users/Filip_000/Desktop/Git/cpu-simulation/cpu-simulation/instruction_list.h
 stdio.h

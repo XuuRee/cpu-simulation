@@ -1,8 +1,9 @@
 #include "instruction_list.h"
 #include <stdlib.h>
-
+#include <assert.h>
 
 void listInit(struct instructionList* container) {
+    assert(container != NULL);
     container->current = NULL;
     container->end = NULL;
 }
@@ -38,14 +39,9 @@ void printList(struct instructionList* container) {
 }
 
 
-/*
- * i) lengthList, jako pocitat se zarazkou? +- 1 ?
- * ii) musi opravdu byt container->end, current ukazovat ke konci na NULL ?
- * iii) NON-FUNCTION!
- */
 unsigned int listClear(struct instructionList* container) {
     struct instruction *current = container->current;
-    struct instruction *next;
+    struct instruction *next = NULL;
     unsigned int lengthList = 0;
 
     while (current != NULL) {

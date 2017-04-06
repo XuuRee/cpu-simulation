@@ -30,8 +30,10 @@ void stackPrint(const struct stack* stack)
             fprintf(stdout, " %d", (stack->values)[i]);    //%zu
             i++;
         }
+        if (i != 0) {
+            fprintf(stdout, " %d\n", *(stack->top));        //\n
+        }
 
-        fprintf(stdout, " %d\n", *(stack->top));        //\n
     } else {
         fprintf(stdout, "\n");
     }
@@ -87,30 +89,26 @@ void stackPop(struct stack* stack)
 
 void cpuInit(struct cpu* cpu)
 {
-    struct stack *memory;
-    memory = &cpu->memory;
+    struct instructionList *pointerList = &cpu->programList;
+    struct stack *pointerMemory = &cpu->memory;
 
-    struct instructionList *list;
-    list = &cpu->programList;       // dont have to use it that way
-
-    memset(cpu->registers, 0, 3);   // memset
-
-    list = malloc(sizeof list);     // or *list?
-    assert(list != NULL);
-    listInit(list);
-
-    memory = malloc(sizeof *memory);
-    assert(memory != NULL);
-    stackInit(memory);
+    //memset(cpu->registers, 0, sizeof(cpu->registers));   // memset
+    cpu->registers[0] = 0;
+    cpu->registers[1] = 0;
+    cpu->registers[2] = 0;
+    listInit(pointerList);
+    stackInit(pointerMemory);
 }
 
 
 void cpuClear(struct cpu* cpu)
 {
-    memset(cpu->registers, 0, 3);
+    memset(cpu->registers, 0, sizeof(cpu->registers));
 
     listClear(&cpu->programList);
-    free(&cpu->programList);
+    free(cpu->programList.current);
+    free(cpu->programList.end);
+    //free(&cpu->programList);
 
     stackClear(&cpu->memory);
     free(&cpu->memory);
@@ -151,13 +149,32 @@ void cpuStep(struct cpu* cpu)
             cpu->registers[0] = *((cpu->memory).top) - cpu->registers[1];
             return;
 
-        case InstSwac: return;
-        case InstSwab: return;
-        case InstInc: return;
-        case InstDec: return;
-        case InstPush: return;
-        case InstPop: return;
-        default: return;
+        case InstSwac:
+            cpu->registers[0] = cpu->registers[2];
+            return;
+
+        case InstSwab:
+            cpu->registers[0] = cpu->registers[1];
+            return;
+
+        case InstInc:
+            cpu->registers[0] += 1;
+            return;
+
+        case InstDec:
+            cpu->registers[0] -= 1;
+            return;
+
+        case InstPush:
+            stackPush(&cpu->memory, cpu->registers[0]);
+            return;
+
+        case InstPop:
+            stackPop(&cpu->memory);
+            return;
+
+        default:
+            return;
    }
 
 }

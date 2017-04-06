@@ -1,11 +1,60 @@
-#include "instruction_list.h"
-//#include "cpu.h"
+//#include "instruction_list.h"
+#include "cpu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
 int main()
 {
+    struct cpu *unit;
+
+    unit = malloc(sizeof *unit);
+
+    if (!unit) {
+        printf("Nepodarilo se alokovat pamet!\n");
+        return 1;
+    }
+
+    struct instruction *firstInstr;
+    struct instruction *secondInstr;
+
+    // -----------------------------------------------
+
+    firstInstr = malloc(sizeof(firstInstr));
+
+    if (!firstInstr) {
+        printf("Nepodarilo se alokovat pamet!\n");
+        return 1;
+    }
+
+    secondInstr = malloc(sizeof(secondInstr));
+
+    if (!secondInstr) {
+        printf("Nepodarilo se alokovat pamet!\n");
+        return 1;
+    }
+
+    firstInstr->arg = 1;
+    firstInstr->type = InstAdd;
+    firstInstr->next = NULL;
+    firstInstr->prev = NULL;
+
+    secondInstr->arg = 1;
+    secondInstr->type = InstSub;
+    secondInstr->next = NULL;
+    secondInstr->prev = NULL;
+
+    // -----------------------------------------------
+
+    cpuInit(unit);
+    listPush(&unit->programList,firstInstr);
+    listPush(&unit->programList,secondInstr);
+    cpuStep(unit);
+    cpuDebug(unit);
+    cpuClear(unit);
+
+    free(unit);
+
     /* =================================================================
 
     printf("Program is starting now...\n");
@@ -39,6 +88,8 @@ int main()
     free(memory);
 
     ================================================================= */
+
+    /* =================================================================
 
     struct instructionList *list;
     struct instruction *firstInstr;
@@ -83,6 +134,8 @@ int main()
     printf("Is Empty: %d\n", listEmpty(list));
     printf("Delete items: %d\n", listClear(list));
     free(list);
+
+    ================================================================= */
 
 	return 0;
 }

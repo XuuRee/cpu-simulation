@@ -19,7 +19,7 @@ void stackPush(struct stack* stack, int32_t cpu_register);
 void stackPop(struct stack* stack);
 
 struct cpu {
-    int32_t registers[3];
+    int32_t registers[3];                   // alocate?
     struct instructionList programList;    // not pointers
     struct stack memory;
 };
