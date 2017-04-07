@@ -1,6 +1,7 @@
 #include "instruction_list.h"
 #include <stdlib.h>
 #include <assert.h>
+#include <stdbool.h>
 
 void listInit(struct instructionList* container) {
     assert(container != NULL);
@@ -39,20 +40,52 @@ void printList(struct instructionList* container) {
 }
 
 
-unsigned int listClear(struct instructionList* container) {
+unsigned int listInitToClear(struct instructionList* container)
+{
+    unsigned int steps = 0;
+
+    if (!container->current && !container->end) {
+        return steps;
+    }
+
+    while (container->current->prev != NULL) {
+        listBackstep(container);
+        steps++;
+    }
+
+    return steps;
+}
+
+
+unsigned int listClear(struct instructionList* container)
+{
+    unsigned lengthToRemove = listInitToClear(container);
+    bool turnNull = false;
+
+    if (lengthToRemove != 0) {
+        turnNull = true;
+    }
+
     struct instruction *current = container->current;
     struct instruction *next = NULL;
+
     unsigned int lengthList = 0;
 
-    while (current != NULL) {
+    while (current != NULL && lengthToRemove > 0) {
         next = current->next;
         free(current);
         current = next;
         lengthList++;
+        lengthToRemove--;
     }
 
-    container->current = NULL;
-    container->end = NULL;
+    if (!turnNull) {
+        container->current = NULL;
+        container->end = NULL;
+    } else {
+        container->current = current;
+        container->current->prev = NULL;
+    }
 
     return lengthList;
 }
@@ -93,6 +126,10 @@ const struct instruction *listBackstep(struct instructionList* container)
 {
     if (listEmpty(container)) {
         return NULL;
+    }
+
+    if(!container->current->prev) {
+        return container->current;
     }
 
     container->current = container->current->prev;

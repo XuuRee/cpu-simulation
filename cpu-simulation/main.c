@@ -128,6 +128,7 @@ int main(int argc, char *argv[])
                     length--;
                 }
                 cpuDebug(unit);
+                listClear(&unit->programList);
             }
         }
 
@@ -139,6 +140,7 @@ int main(int argc, char *argv[])
                     length--;
                 }
                 cpuDebug(unit);
+                listClear(&unit->programList);
             }
         }
     }

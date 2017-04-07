@@ -104,7 +104,11 @@ void cpuClear(struct cpu* cpu)
     cpu->registers[0] = 0;
     cpu->registers[1] = 0;
     cpu->registers[2] = 0;
-    listClear(&cpu->programList);
+
+    if (cpu->programList.current) {
+        listClear(&cpu->programList);
+    }
+
     stackClear(&cpu->memory);
 }
 
