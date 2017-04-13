@@ -1,143 +1,118 @@
 #include "instruction_list.h"
 #include <stdlib.h>
 #include <assert.h>
-#include <stdbool.h>
 
-void listInit(struct instructionList* container) {
+void listInit(struct instructionList *container)
+{
     assert(container != NULL);
-    container->current = NULL;
-    container->end = NULL;
+
+    struct instruction *instruction = malloc(sizeof *instruction);
+    assert(instruction != NULL);
+
+    instruction->arg = 0;
+    instruction->type = InstNop;
+    instruction->next = NULL;
+    instruction->prev = NULL;
+
+    container->current = instruction;
+    container->end = instruction;
 }
 
-
-const char *getInstruction(enum instructionType instruction) {
-    switch (instruction) {
-        case InstNop: return "InstNop";
-        case InstAdd: return "InstAdd";
-        case InstSub: return "InstSub";
-        case InstMul: return "InstMul";
-        case InstDiv: return "InstDiv";
-        case InstMova: return "InstMova";
-        case InstLoad: return "InstLoad";
-        case InstSwac: return "InstSwac";
-        case InstSwab: return "InstSwab";
-        case InstInc: return "InstInc";
-        case InstDec: return "InstDec";
-        case InstPush: return "InstPush";
-        case InstPop: return "InstPop";
-        default: return "Unknown value";
-   }
-}
-
-
-void printList(struct instructionList* container) {
-    struct instruction *current = container->current;
-
-    while (current != NULL) {
-        printf("%s\n", getInstruction(current->type));
-        current = current->next;
-    }
-}
-
-
-unsigned int listInitToClear(struct instructionList* container)
+unsigned int listClear(struct instructionList *container)
 {
-    unsigned int steps = 0;
+    assert(container != NULL);
+    assert(container->end != NULL);
+    assert(container->current != NULL);
 
-    if (!container->current && !container->end) {
-        return steps;
-    }
+    while(listBackstep(container));
 
-    while (container->current->prev != NULL) {
-        listBackstep(container);
-        steps++;
-    }
-
-    return steps;
-}
-
-
-unsigned int listClear(struct instructionList* container)
-{
-    unsigned lengthToRemove = listInitToClear(container);
-    bool turnNull = false;
-
-    if (lengthToRemove != 0) {
-        turnNull = true;
-    }
-
-    struct instruction *current = container->current;
     struct instruction *next = NULL;
+    struct instruction *current = container->current;
 
     unsigned int lengthList = 0;
 
-    while (current != NULL && lengthToRemove > 0) {
+    while (current != NULL) {
         next = current->next;
         free(current);
         current = next;
         lengthList++;
-        lengthToRemove--;
     }
 
-    if (!turnNull) {
-        container->current = NULL;
-        container->end = NULL;
-    } else {
-        container->current = current;
-        container->current->prev = NULL;
-    }
+    container->current = NULL;
+    container->end = NULL;
 
     return lengthList;
 }
 
-
-void listPush(struct instructionList* container, struct instruction* item)
+void listPush(struct instructionList *container, struct instruction *item)
 {
-    if (!container->current) {
-        item->next = NULL;
+    assert(item != NULL);
+    assert(container != NULL);
+    assert(container->end != NULL);
+    assert(container->current != NULL);
+
+    if (listEmpty(container)) {
         item->prev = NULL;
+        item->next = container->end;
         container->current = item;
-        container->end = item;
+        container->end->prev = item;
     } else {
-        item->next = NULL;
-        item->prev = container->end;
-        container->end->next = item;
-        container->end = item;
+        item->next = container->end;
+        item->prev = container->end->prev;
+        container->end->prev->next = item;
+        container->end->prev = item;
     }
 }
 
-
-const struct instruction *listStep(struct instructionList* container)
+const struct instruction *listStep(struct instructionList *container)
 {
+    assert(container != NULL);
+    assert(container->end != NULL);
+    assert(container->current != NULL);
+
     if (listEmpty(container)) {
         return NULL;
     }
 
     if (!container->current->next) {
-        return container->current;
+        return NULL;
     }
 
     container->current = container->current->next;
     return container->current->prev;
 }
 
-
-const struct instruction *listBackstep(struct instructionList* container)
+const struct instruction *listBackstep(struct instructionList *container)
 {
+    assert(container != NULL);
+    assert(container->end != NULL);
+    assert(container->current != NULL);
+
     if (listEmpty(container)) {
         return NULL;
     }
 
-    if(!container->current->prev) {
-        return container->current;
+    if (!container->current->prev) {
+        return NULL;
     }
 
     container->current = container->current->prev;
     return container->current->next;
 }
 
-
-unsigned int listEmpty(const struct instructionList* container)
+int listEmpty(const struct instructionList *container)
 {
-    return (!container->current) ? 1 : 0;
+    assert(container != NULL);
+    assert(container->end != NULL);
+    assert(container->current != NULL);
+
+    struct instruction *terminator = container->current;
+
+    if (terminator->type == InstNop) {
+        if (!terminator->next && !terminator->prev) {
+            return 1;
+        }
+    }
+
+    return 0;
 }

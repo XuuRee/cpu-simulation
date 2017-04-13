@@ -5,54 +5,54 @@
 #include <string.h>
 #include <stdbool.h>
 
-
-unsigned int listLength(struct instructionList *container)
+/**
+ * Identify given string and return relevant instruction.
+ * If string is not liable then return Nop instruction.
+ *
+ * @param instruction   given string (type const char *)
+ * @return              instruction (type instructionType)
+ */
+enum instructionType getInstructionStdin(const char *instruction)
 {
-    unsigned int length = 0;
-    struct instruction *start = container->current;
-
-    while (start != NULL) {
-        length++;
-        start = start->next;
-    }
-
-    return length;
-}
-
-
-int getInstructionStdin(const char* instruction) {
-    if (strcmp(instruction, "nop\n") == 0) {
-        return 1;
-    } else if (strcmp(instruction, "add\n") == 0) {
-        return 2;
+    if (strcmp(instruction, "add\n") == 0) {
+        return InstAdd;
     } else if (strcmp(instruction, "sub\n") == 0) {
-        return 3;
+        return InstSub;
     } else if (strcmp(instruction, "mul\n") == 0) {
-        return 4;
+        return InstMul;
     } else if (strcmp(instruction, "div\n") == 0) {
-        return 5;
+        return InstDiv;
     } else if (strcmp(instruction, "mova") == 0) {
-        return 6;
+        return InstMova;
     } else if (strcmp(instruction, "load\n") == 0) {
-        return 7;
+        return InstLoad;
     } else if (strcmp(instruction, "swac\n") == 0) {
-        return 8;
+        return InstSwac;
     } else if (strcmp(instruction, "swab\n") == 0) {
-        return 9;
+        return InstSwab;
     } else if (strcmp(instruction, "inc\n") == 0) {
-        return 10;
+        return InstInc;
     } else if (strcmp(instruction, "dec\n") == 0) {
-        return 11;
+        return InstDec;
     } else if (strcmp(instruction, "push\n") == 0) {
-        return 12;
+        return InstPush;
     } else if (strcmp(instruction, "pop\n") == 0) {
-        return 13;
+        return InstPop;
     } else {
-        return 0;
+        return InstNop;
     }
 }
 
-
+/**
+ * Read instructions from stdin and if the instructions are
+ * valid then save them to the list, otherwise ignore it.
+ * Command 'run' terminate function with true value, command
+ * 'halt' with false value.
+ *
+ * @param unit          given cpu structure
+ * @return              false if given instruction is 'halt',
+ *                      true otherwise
+ */
 bool saveInstructions(struct cpu *unit)
 {
     char buffer[32];
@@ -61,41 +61,41 @@ bool saveInstructions(struct cpu *unit)
     do {
         fprintf(stdout, "> ");
 
-        struct instruction *instr = malloc(sizeof *instr);
-        assert(instr != NULL);
-
         fgets(buffer, 32, stdin);
         assert(buffer != NULL);
 
         instruction = strtok(buffer, " ");
 
         if (strcmp(instruction, "halt\n") == 0) {
-            free(instr);
             return false;
         }
 
         if (strcmp(instruction, "run\n") == 0) {
-            free(instr);
             return true;
         }
 
-        int instrEnum = getInstructionStdin(instruction);
+        enum instructionType instructionEnum = getInstructionStdin(instruction);
 
-        if (!instrEnum) {
-            free(instr);
-        } else {
-            if (strcmp(instruction, "mova") == 0) {
+        if (instructionEnum != InstNop) {
+            struct instruction *instr = malloc(sizeof *instr);
+            assert(instr != NULL);
+
+            if (instructionEnum == InstMova) {
                 argument = strtok(NULL, " ");
                 instr->arg = atoi(argument);
             } else {
                 instr->arg = 0;
             }
-            instr->type = instrEnum - 1;
-            listPush(&unit->programList, instr);
-        }
-    } while(true);
-}
 
+            instr->type = instructionEnum;
+            listPush(&unit->programList, instr);
+
+            if (unit->programList.current == unit->programList.end) {
+                listBackstep(&unit->programList);
+            }
+        }
+    } while (true);
+}
 
 int main(int argc, char *argv[])
 {
@@ -111,41 +111,36 @@ int main(int argc, char *argv[])
         free(unit);
         fprintf(stderr, "ERROR: Wrong number of arguments in main function!\n");
         return 1;
-    } else {
-        if (strcmp(argv[1], "-h") == 0) {
-            fprintf(stdout, "\n-h\t\tprogram vypise informace o programu a jeho prepinacich, nasledne se ukonci\n");
-            fprintf(stdout, "-r <number>\tpo zavolani prikazu run program vyhodnoti nejvyse <number> instrukci\n");
-            fprintf(stdout, "-R\t\tpo zavolani prikazu run program vyhodnocuje instrukce ve fronte tak dlouho, dokud nenarazi na konec seznamu instrukci\n\n");
-        }
+    }
 
-        if (strcmp(argv[1], "-r") == 0) {
-            while(saveInstructions(unit)) {
-                unsigned int iterations = atoi(argv[2]);
-                unsigned int length = listLength(&unit->programList);
-                while (iterations > 0 && length > 0) {
-                    cpuStep(unit);
-                    iterations--;
-                    length--;
-                }
-                cpuDebug(unit);
-                listClear(&unit->programList);
-            }
-        }
+    if (strcmp(argv[1], "-h") == 0) {
+        fprintf(stdout, "\n-h\t\tprogram vypise informace o programu a jeho prepinacich, nasledne se ukonci\n");
+        fprintf(stdout, "-r <number>\tpo zavolani prikazu run program vyhodnoti nejvyse <number> instrukci\n");
+        fprintf(stdout, "-R\t\tpo zavolani prikazu run program vyhodnocuje instrukce ve fronte tak dlouho, dokud nenarazi na konec seznamu instrukci\n\n");
+    }
 
-        if (strcmp(argv[1], "-R") == 0) {
-            while (saveInstructions(unit)) {
-                unsigned int length = listLength(&unit->programList);
-                while (length > 0) {
-                    cpuStep(unit);
-                    length--;
-                }
-                cpuDebug(unit);
-                listClear(&unit->programList);
+    if (strcmp(argv[1], "-r") == 0) {
+        while (saveInstructions(unit)) {
+            unsigned int iterations = atoi(argv[2]);
+            while (unit->programList.current != unit->programList.end && iterations > 0) {
+                cpuStep(unit);
+                iterations--;
             }
+            cpuDebug(unit);
+        }
+    }
+
+    if (strcmp(argv[1], "-R") == 0) {
+        while (saveInstructions(unit)) {
+            while (unit->programList.current != unit->programList.end) {
+                cpuStep(unit);
+            }
+            cpuDebug(unit);
         }
     }
 
     cpuClear(unit);
     free(unit);
-	return 0;
+
+    return 0;
 }
