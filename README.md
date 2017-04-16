@@ -1,7 +1,7 @@
 # CPU 
 Simulation of central processing unit instructions in C language.
 
-# Stack (LIFO, abstract data type)
+## Stack (LIFO, abstract data type)
 ```
 struct stack
 {
@@ -17,7 +17,7 @@ void stackPush(struct stack *stack, int32_t cpu_register);
 void stackPop(struct stack *stack);
 ```
 
-# Running the program
+## Running the program
 ```
 ./a.out -R
 > mova 10
