@@ -20,14 +20,14 @@ enum instructionType
 
 struct instruction
 {
-	struct instruction *prev, *next; 
-	enum instructionType type;
+    struct instruction *prev, *next;
+    enum instructionType type;
     int32_t arg;
 };
 
 struct instructionList
 {
-	struct instruction *end, *current;
+    struct instruction *end, *current;
 };
 
 void listInit(struct instructionList *container);

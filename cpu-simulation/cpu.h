@@ -3,8 +3,8 @@
 
 struct stack
 {
-    int32_t* values;
-    int32_t* top;
+    int32_t *values;
+    int32_t *top;
 };
 
 void stackInit(struct stack *stack);

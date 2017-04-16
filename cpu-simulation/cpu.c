@@ -121,8 +121,7 @@ int cpuStep(struct cpu *cpu)
         return 1;
 
     case InstLoad:
-        assert(cpu->memory.top != NULL);
-        cpu->registers[0] = *((cpu->memory.top) - cpu->registers[1]);
+        cpu->registers[0] = *((cpu->memory).top - cpu->registers[1]);
         return 1;
 
     case InstSwac:
@@ -155,7 +154,7 @@ int cpuStep(struct cpu *cpu)
 
     default:
         return 0;
-   }
+    }
 }
 
 void cpuDebug(const struct cpu *cpu)
